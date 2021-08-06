@@ -7,6 +7,7 @@ using Core.Compiler.Timings: InferenceFrameInfo
 using SnoopCompileCore: InferenceTiming, InferenceTimingNode, inclusive, exclusive
 using Profile
 using Cthulhu
+using JET
 
 const InferenceNode = Union{InferenceFrameInfo,InferenceTiming,InferenceTimingNode}
 
@@ -886,6 +887,9 @@ Cthulhu.method(itrig::InferenceTrigger) = Method(itrig.node)
 Cthulhu.specTypes(itrig::InferenceTrigger) = Cthulhu.specTypes(Cthulhu.instance(itrig))
 Cthulhu.backedges(itrig::InferenceTrigger) = (itrig.callerframes,)
 Cthulhu.nextnode(itrig::InferenceTrigger, edge) = (ret = callingframe(itrig); return isempty(ret.callerframes) ? nothing : ret)
+
+report_callee(itrig::InferenceTrigger; jetconfigs...) = report_call(Cthulhu.specTypes(Cthulhu.instance(itrig)); jetconfigs...)
+report_caller(itrig::InferenceTrigger; jetconfigs...) = report_call(Cthulhu.specTypes(callerinstance(itrig)); jetconfigs...)
 
 filtermod(mod::Module, itrigs::AbstractVector{InferenceTrigger}) = filter(==(mod) ∘ callermodule, itrigs)
 
