@@ -1,6 +1,8 @@
 module SCPyPlotExt
 
 using SnoopCompile
+using Profile
+import SnoopCompile: pgdsgui
 using SnoopCompile: MethodLoc, InferenceTimingNode, PGDSData, lookups
 using PyPlot: PyPlot, plt, PyCall
 
